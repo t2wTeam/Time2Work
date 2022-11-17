@@ -7,7 +7,7 @@ let MemberPage = () => {
         console.log(e)
     }
 
-    const days = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su']
+    const days = ['MON', 'TU', 'WED', 'THUR', 'FRI', 'SAT', 'SUN']
 
 
 
@@ -47,15 +47,17 @@ let MemberPage = () => {
                 </FormControl>
               <br/>
                 <FormControl>
-                    <InputLabel htmlFor="start">Start Time: </InputLabel>
-                    <Input name="start" />
+                    {/*<InputLabel htmlFor="start">Start Time: </InputLabel>*/}
+                    <Input name="start" type = "time"/>
                 </FormControl>
+              {"    ——    "}
                 <FormControl>
-                    <InputLabel htmlFor="end">End Time: </InputLabel>
-                    <Input name="end" />
+                    {/*<InputLabel htmlFor="start">Start Time: </InputLabel>*/}
+                    <Input name="start" type = "time"/>
                 </FormControl>
+
                 <FormControl>
-                    <Button type="submit" variant="contained">Add</Button>
+                    <Button sx={{ml: "1rem"}} type="submit" variant="contained">Add</Button>
                 </FormControl>
             </Box>
         </Container>
