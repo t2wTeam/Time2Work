@@ -52,10 +52,7 @@ let MemberPage = () => {
                     <Input name="end" />
                 </FormControl>
                 <FormControl>
-                    <Button type="submit" variant="contained">Log In</Button>
-                </FormControl>
-                <FormControl>
-                    <Button type="submit" variant="contained">Log In</Button>
+                    <Button type="submit" variant="contained">Add</Button>
                 </FormControl>
             </Box>
         </Container>
