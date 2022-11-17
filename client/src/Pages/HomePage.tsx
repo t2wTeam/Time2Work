@@ -5,7 +5,7 @@ let HomePage = () => {
     const navigate = useNavigate()
 
     const submit = (e: any) => {
-        if (e.target.orgName.value === ""){alert("Please entre you organization name to continue");}
+        if (e.target.orgName.value === ""){alert("Please entre your organization name to continue");}
         else{
             e && e.preventDefault();
             navigate(`/${e.target.orgName.value}`)
