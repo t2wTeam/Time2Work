@@ -1,11 +1,12 @@
 import React from 'react';
-import { BrowserRouter } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { blue, red, green } from "@mui/material/colors"
 import { CssBaseline, useMediaQuery } from "@mui/material"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { ReactQueryDevtools } from "react-query/devtools"
 import HomePage from './Pages/HomePage';
+import OrgPage from './Pages/OrgPage';
 
 
 const queryClient = new QueryClient({
@@ -49,7 +50,10 @@ let App = () => {
                 <QueryClientProvider client={queryClient}>
                     <ThemeProvider theme={theme}>
                         <CssBaseline />
-                        <HomePage />
+                        <Routes>
+                            <Route path="/" element={<HomePage/>}/>
+                            <Route path="/:organization" element={<OrgPage/>}/>
+                        </Routes>
                         <ReactQueryDevtools />
                     </ThemeProvider>
                 </QueryClientProvider>
