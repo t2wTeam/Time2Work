@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "react-query"
 import { ReactQueryDevtools } from "react-query/devtools"
 import HomePage from './Pages/HomePage';
 import OrgPage from './Pages/OrgPage';
+import { SnackbarProvider } from 'notistack';
 
 
 const queryClient = new QueryClient({
@@ -43,18 +44,20 @@ let App = () => {
     let toggleDarkMode = () => {
         setDarkMode((dark) => !dark)
     }
-    
+
     return (
         <React.StrictMode>
             <BrowserRouter>
                 <QueryClientProvider client={queryClient}>
                     <ThemeProvider theme={theme}>
-                        <CssBaseline />
-                        <Routes>
-                            <Route path="/" element={<HomePage/>}/>
-                            <Route path="/:organization" element={<OrgPage/>}/>
-                        </Routes>
-                        <ReactQueryDevtools />
+                        <SnackbarProvider>
+                            <CssBaseline />
+                            <Routes>
+                                <Route path="/" element={<HomePage />} />
+                                <Route path="/:organization" element={<OrgPage />} />
+                            </Routes>
+                            <ReactQueryDevtools />
+                        </SnackbarProvider>
                     </ThemeProvider>
                 </QueryClientProvider>
             </BrowserRouter>
