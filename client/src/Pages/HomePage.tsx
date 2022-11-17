@@ -1,30 +1,32 @@
 import { Box, Container, Paper, TextField, Button, FormControl, FormHelperText, Input, InputLabel } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 let HomePage = () => {
+    const navigate = useNavigate()
+
     const submit = (e: any) => {
         e && e.preventDefault();
-        console.log(e)
+        navigate(`/${e.target.orgName.value}`)
     }
 
 
     return (
-        <Container style={{ height: "90vh", minWidth: "90%", marginTop: "2rem" }} >
+        <Container sx={{ height: "100%", width: "100%", display: "flex", justifyContent: "center"}}>
             <Box
                 component="form"
                 onSubmit={submit}
-                // sx={{
-                //     '& > :not(style)': { m: 1, width: '25ch' },
-                // }}
                 noValidate
                 autoComplete="off"
+                display="flex"
+                alignItems="center"
             >
                 <FormControl>
-                    <InputLabel htmlFor="my-input">Email address</InputLabel>
-                    <Input name="blabla" aria-describedby="my-helper-text" />
-                    <FormHelperText id="my-helper-text">We'll never share your email.</FormHelperText>
+                    <InputLabel>Organization Name:</InputLabel>
+                    <Input name="orgName" aria-describedby="help-text" />
+                    <FormHelperText id="help-text">Please Input Organization Name</FormHelperText>
                 </FormControl>
                 <FormControl>
-                    <Button type="submit" variant="contained">Log In</Button>
+                    <Button sx={{ml: "1rem"}} type="submit" variant="contained">GO</Button>
                 </FormControl>
             </Box>
         </Container>
