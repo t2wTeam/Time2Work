@@ -5,12 +5,16 @@ let HomePage = () => {
     const navigate = useNavigate()
 
     const submit = (e: any) => {
-        e && e.preventDefault();
-        navigate(`/${e.target.orgName.value}`)
+        if (e.target.orgName.value === ""){alert("Please entre you organization name to continue");}
+        else{
+            e && e.preventDefault();
+            navigate(`/${e.target.orgName.value}`)
+        }
     }
 
 
     return (
+
         <Container sx={{ height: "100%", width: "100%", display: "flex", justifyContent: "center"}}>
             <Box
                 component="form"
