@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "react-query"
 import { ReactQueryDevtools } from "react-query/devtools"
 import HomePage from './Pages/HomePage';
 import OrgPage from './Pages/OrgPage';
+import MemberPage from "./Pages/MemberPage";
 
 
 const queryClient = new QueryClient({
@@ -53,6 +54,7 @@ let App = () => {
                         <Routes>
                             <Route path="/" element={<HomePage/>}/>
                             <Route path="/:organization" element={<OrgPage/>}/>
+                            <Route path="/:organization/:name" element = {<MemberPage/>}/>
                         </Routes>
                         <ReactQueryDevtools />
                     </ThemeProvider>

@@ -20,19 +20,21 @@ let MemberPage = () => {
                 autoComplete="off"
             >
                 <FormControl>
-                    <FormLabel id="available-label">Available?</FormLabel>
+                    <FormLabel id="available-label">Availability</FormLabel>
                     <RadioGroup
+                        row = {true}
                         aria-labelledby="available-label"
                         defaultValue="available"
                         name="available-group"
                     >
-                        <FormControlLabel value="available" control={<Radio />} label="available" />
-                        <FormControlLabel value="unavailable" control={<Radio />} label="available" />
+                        <FormControlLabel value="available" control={<Radio />} label="Available" />
+                        <FormControlLabel value="unavailable" control={<Radio />} label="Unavailable" />
                     </RadioGroup>
                 </FormControl>
+              <br/>
                 <FormControl component="fieldset" variant="standard">
                     <FormLabel component="legend">Day(s)</FormLabel>
-                    <FormGroup>
+                    <FormGroup row = {true}>
                     {days.map(day => (
                         <FormControlLabel
                             control={
@@ -43,6 +45,7 @@ let MemberPage = () => {
                     ))}
                     </FormGroup>
                 </FormControl>
+              <br/>
                 <FormControl>
                     <InputLabel htmlFor="start">Start Time: </InputLabel>
                     <Input name="start" />
