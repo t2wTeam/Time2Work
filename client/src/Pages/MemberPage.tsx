@@ -2,7 +2,7 @@ import { Label } from '@mui/icons-material';
 import { Box, Container, Paper, TextField, Button, FormControl, FormHelperText, Input, InputLabel, FormControlLabel, FormLabel, Radio, RadioGroup, Checkbox, FormGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Autocomplete } from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Items/Loading';
@@ -16,6 +16,7 @@ let MemberPage = () => {
     let { organization, name } = useParams()
     let navigate = useNavigate()
     const queryClient = useQueryClient()
+    const [selectedDays, setSelectedDays] = useState([false, false, false, false, false, false, false]) 
 
     let { isLoading: loading, error: error, data: data, } = useQuery(
         ["get-member", name],
@@ -55,8 +56,14 @@ let MemberPage = () => {
 
     const addTime = (e: any) => {
         e.preventDefault()
-        console.log(e.target.value)
-        mutation.mutate(e.target.value)
+        const data = {
+            available: e.target.availablegroup.value,
+            days: selectedDays,
+            start: e.target.start.value,
+            end: e.target.end.value,
+        }
+        console.log(data)
+        mutation.mutate(data)
     }
 
 
@@ -126,20 +133,23 @@ let MemberPage = () => {
                                     row={true}
                                     aria-labelledby="available-label"
                                     defaultValue="available"
-                                    name="available-group"
+                                    name="availablegroup"
                                 >
-                                    <FormControlLabel value="available" control={<Radio />} label="Available" />
-                                    <FormControlLabel value="unavailable" control={<Radio />} label="Unavailable" />
+                                    <FormControlLabel value={true} control={<Radio />} label="Available" />
+                                    <FormControlLabel value={false} control={<Radio />} label="Unavailable" />
                                 </RadioGroup>
                             </FormControl>
                             <FormControl component="fieldset" variant="standard">
                                 <FormLabel component="legend">Day(s)</FormLabel>
                                 <FormGroup row={true}>
-                                    {dayShort.map(day => (
+                                    {dayShort.map((day, index) => (
                                         <FormControlLabel
                                             key={day}
                                             control={
-                                                <Checkbox name={day} />
+                                                <Checkbox name={day} onChange={(e) => {
+                                                    selectedDays[index] = e.target.checked
+                                                    setSelectedDays(selectedDays) 
+                                                }}/>
                                             }
                                             label={day}
                                         />
