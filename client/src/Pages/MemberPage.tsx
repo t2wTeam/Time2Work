@@ -3,7 +3,7 @@ import { Box, Container, Paper, TextField, Button, FormControl, FormHelperText, 
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { ReactNode } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Items/Loading';
 import { TimeFragmentVertical } from '../Items/TimeFragment';
@@ -14,6 +14,7 @@ let MemberPage = () => {
     let { enqueueSnackbar } = useSnackbar()
     let { organization, name } = useParams()
     let navigate = useNavigate()
+    const queryClient = useQueryClient()
 
     let { isLoading: loading, error: error, data: data, } = useQuery(
         ["get-member", name],
@@ -42,8 +43,19 @@ let MemberPage = () => {
     const days = ['M', 'TU', 'W', 'TH', 'F', 'SA', 'SU']
     const dayShort = ['M', 'TU', 'W', 'TH', 'F', 'SA', 'SU']
 
-    const addTime = () => {
-        // WIP
+    const mutation = useMutation(async (data: any) => {
+        return axios.post(`/api/${organization}/${name}`, data)
+    },
+    {
+        onSuccess: () => {
+            queryClient.invalidateQueries("get-member")
+        }
+    })
+
+    const addTime = (e: any) => {
+        e.preventDefault()
+        console.log(e.target.value)
+        mutation.mutate(e.target.value)
     }
 
 
@@ -52,7 +64,6 @@ let MemberPage = () => {
         <Container sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
 
             {loading ? (
-
                 <Loading />
             ) : (
                 <>
