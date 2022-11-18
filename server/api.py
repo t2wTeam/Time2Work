@@ -15,6 +15,15 @@ class AddTimeModel(BaseModel):
 
 
 
+def new_overlap(A_matx,B_matx):
+    container = [[] for i in range(7)]
+    for index, list_zip in enumerate(zip(A_matx, B_matx)):
+        # print("current list_zip is ", list_zip)
+        for i,j in zip(list_zip[0],list_zip[1]):
+            # print("current i,j is", i,j)
+            container[index].append( (not i ^ j) and i != 0)
+    return container
+
 @app.get("/api/{organization}")
 async def login(organization: str):
     if os.path.exists(f'./data/{organization}.json'):
@@ -77,8 +86,8 @@ async def get_member(organization: str, name: str):
 
 @app.post("/api/{organization}/{name}")
 async def add_time(organization: str, name: str, time: AddTimeModel):
-    if os.path.exists(f'./data/{organization}.json'):
-        with open(f'vv', 'r') as f:
+    if os.path.exists(f'{organization}.json'):
+        with open(f'{organization}.json', 'r') as f:
             content = json.load(f)
             inputTime = [False] * 12 * 4
             inputTime[time.startIndex:(time.endIndex + 1)] = [True]*((time.endIndex+1)-time.startIndex)
