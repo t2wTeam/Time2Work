@@ -45,11 +45,11 @@ let OrgPage = () => {
     const mutation = useMutation(async (member: string) => {
         return axios.put(`/api/${organization}/${member}`)
     },
-        {
-            onSuccess: () => {
-                queryClient.invalidateQueries("get-organization-times")
-            }
-        })
+    {
+        onSuccess: () => {
+            queryClient.invalidateQueries("get-organization-times")
+        }
+    })
 
     const addMember = () => {
         mutation.mutate(newMember)
