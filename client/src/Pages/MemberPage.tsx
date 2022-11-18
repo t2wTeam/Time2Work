@@ -1,12 +1,14 @@
-import { Box, Container, Paper, TextField, Button, FormControl, FormHelperText, Input, InputLabel, FormControlLabel, FormLabel, Radio, RadioGroup, Checkbox, FormGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Label } from '@mui/icons-material';
+import { Box, Container, Paper, TextField, Button, FormControl, FormHelperText, Input, InputLabel, FormControlLabel, FormLabel, Radio, RadioGroup, Checkbox, FormGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { ReactNode } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import TimeFragment from '../Items/TimeFragment';
+import Loading from '../Items/Loading';
+import { TimeFragmentVertical } from '../Items/TimeFragment';
 
-const cellStyle = { border: "1px solid", padding: "0", height: "2rem" }
+const cellStyle = { border: "1px solid", padding: "0", height: "3rem" }
 
 let MemberPage = () => {
     let { enqueueSnackbar } = useSnackbar()
@@ -37,89 +39,116 @@ let MemberPage = () => {
         navigate("/")
     }
 
-    const days = ['MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT', 'SUN']
+    const days = ['M', 'TU', 'W', 'TH', 'F', 'SA', 'SU']
+    const dayShort = ['M', 'TU', 'W', 'TH', 'F', 'SA', 'SU']
 
     const addTime = () => {
         // WIP
     }
 
 
-    return (
-        <>
-        <TableContainer>
-            <Table size="medium">
-                <TableHead>
-                    <TableRow>
-                        {
-                            days.map(d => (
-                                <TableCell key={d} sx={cellStyle} width="6%" align="center">
-                                    {d}
-                                </TableCell>
-                            ))
-                        }
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {
-                        days.map(d => (
-                            <TableCell key={d} sx={cellStyle} width="6%" align="center">
-                                {d}
-                            </TableCell>
-                        ))
-                    }
-                </TableBody>
-            </Table>
-        </TableContainer>
-        <Container style={{ height: "90vh", minWidth: "90%", marginTop: "2rem" }} >
-          <Box
-                component="form"
-                onSubmit={addTime}
-                noValidate
-                autoComplete="off"
-            >
-                <FormControl>
-                    <FormLabel id="available-label">Availability</FormLabel>
-                    <RadioGroup
-                        row = {true}
-                        aria-labelledby="available-label"
-                        defaultValue="available"
-                        name="available-group"
-                    >
-                        <FormControlLabel value="available" control={<Radio />} label="Available" />
-                        <FormControlLabel value="unavailable" control={<Radio />} label="Unavailable" />
-                    </RadioGroup>
-                </FormControl>
-              <br/>
-                <FormControl component="fieldset" variant="standard">
-                    <FormLabel component="legend">Day(s)</FormLabel>
-                    <FormGroup row = {true}>
-                    {days.map(day => (
-                        <FormControlLabel
-                            control={
-                                <Checkbox name={day} />
-                            }
-                            label={day}
-                        />
-                    ))}
-                    </FormGroup>
-                </FormControl>
-              <br/>
-                <FormControl>
-                    {/*<InputLabel htmlFor="start">Start Time: </InputLabel>*/}
-                    <Input name="start" type = "time"/>
-                </FormControl>
-              {"    ——    "}
-                <FormControl>
-                    {/*<InputLabel htmlFor="start">Start Time: </InputLabel>*/}
-                    <Input name="start" type = "time"/>
-                </FormControl>
 
-                <FormControl>
-                    <Button sx={{ml: "1rem"}} type="submit" variant="contained">Add</Button>
-                </FormControl>
-            </Box>
+    return (
+        <Container sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+
+            {loading ? (
+
+                <Loading />
+            ) : (
+                <>
+                    <TableContainer >
+                        <Table size="small" sx={{border:"1px solid"}}>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell sx={{borderBottom: "1px solid"}} width="16%" />
+                                    {
+                                        days.map(d => (
+                                            <TableCell sx={{borderBottom: "1px solid"}} key={d} width="12%" align="center">
+                                                {d}
+                                            </TableCell>
+                                        ))
+                                    }
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    Array.from(Array(12).keys()).map((i, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell sx={{borderBottom: "1px solid"}} align='center' width="16%">{`${i + 8}: 00`}</TableCell>
+                                            {
+                                                days.map((d, di) => (
+                                                    <TableCell sx={cellStyle} key={d} width="12%">
+                                                        <TimeFragmentVertical
+                                                            fragments={[
+                                                                data[di * 48 + 4 * i],
+                                                                data[di * 48 + 4 * i + 1],
+                                                                data[di * 48 + 4 * i + 2],
+                                                                data[di * 48 + 4 * i + 3]
+                                                            ]}
+                                                        />
+                                                    </TableCell>
+                                                ))
+                                            }
+                                        </TableRow>
+                                    ))
+                                }
+
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <Paper sx={{ml:"2rem"}}>
+                        <Box
+                            padding="2rem"
+                            component="form"
+                            onSubmit={addTime}
+                            noValidate
+                            autoComplete="off"
+                        >
+
+                            <FormControl>
+                                <FormLabel id="available-label">Availability</FormLabel>
+                                <RadioGroup
+                                    row={true}
+                                    aria-labelledby="available-label"
+                                    defaultValue="available"
+                                    name="available-group"
+                                >
+                                    <FormControlLabel value="available" control={<Radio />} label="Available" />
+                                    <FormControlLabel value="unavailable" control={<Radio />} label="Unavailable" />
+                                </RadioGroup>
+                            </FormControl>
+                            <FormControl component="fieldset" variant="standard">
+                                <FormLabel component="legend">Day(s)</FormLabel>
+                                <FormGroup row={true}>
+                                    {dayShort.map(day => (
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox name={day} />
+                                            }
+                                            label={day}
+                                        />
+                                    ))}
+                                </FormGroup>
+                            </FormControl>
+                            <FormControl>
+                                {/*<InputLabel htmlFor="start">Start Time: </InputLabel>*/}
+                                <Input type="time" />
+                            </FormControl>
+                                <Typography component="span" sx={{mx:"1rem"}}>
+                                    {"—"}
+                                </Typography>
+                            <FormControl>
+                                {/*<InputLabel htmlFor="start">Start Time: </InputLabel>*/}
+                                <Input name="start" type="time"/>
+                            </FormControl>
+                            <FormControl>
+                                <Button sx={{ ml: "1rem" }} type="submit" variant="contained">Add</Button>
+                            </FormControl>
+                        </Box>
+                    </Paper>
+                </>
+            )}
         </Container>
-        </>
     )
 }
 

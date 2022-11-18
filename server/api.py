@@ -54,8 +54,8 @@ async def add_member(organization: str, name: str):
                         )
             else:
                 PersonAva = []
-                for i in range(7):
-                    PersonAva.append([False] * 12 * 4)
+                for i in range(7*4*12):
+                    PersonAva.append(False)
                 content[name] = PersonAva
                 f.seek(0)
                 json.dump(content, f)

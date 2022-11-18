@@ -6,7 +6,7 @@ interface TimeFragment {
     fragments: boolean[]
 }
 
-let TimeFragment = (props: TimeFragment) => {
+export const TimeFragment = (props: TimeFragment) => {
     let { fragments } = props
     return (
         <Grid container width="100%" height="100%">
@@ -19,4 +19,21 @@ let TimeFragment = (props: TimeFragment) => {
     )
 }
 
-export default TimeFragment
+
+export const TimeFragmentVertical = (props: TimeFragment) =>{
+    let { fragments } = props
+    return (
+        <Grid container width="100%" height="100%">
+            {
+                fragments.map((availibility, i) => (
+                    <Grid item key={i} xs={12}  width="100%"  height="25%"  
+                    sx={{ 
+                        bgcolor: availibility ? "darkgreen" : "darkred",
+                        borderTop: i === 2 ?  "1px dashed": "none",
+                    }}/>
+                ))
+            }
+        </Grid>
+    )
+}
+

@@ -1,11 +1,11 @@
-import { Box, Container, Paper, Button, FormControl, FormHelperText, Input, InputLabel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Skeleton, CircularProgress, Alert, Typography, Link } from '@mui/material';
+import { Box, Container, Paper, Button, FormControl, FormHelperText, Input, InputLabel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Skeleton, CircularProgress, Alert, Typography, Link, Slide } from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Items/Loading';
-import TimeFragment from '../Items/TimeFragment';
+import { TimeFragment } from '../Items/TimeFragment';
 
 const cellStyle = { border: "1px solid", padding: "0", height: "2rem" }
 
@@ -13,7 +13,7 @@ let OrgPage = () => {
     let { enqueueSnackbar } = useSnackbar()
     let { organization } = useParams()
     let navigate = useNavigate()
-    const dayText = ['Monday', "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    const days = ['Monday', "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const [day, setDay] = useState(0); // 0-6
     const [newMember, setNewMember] = useState("");
     const queryClient = useQueryClient()
@@ -68,12 +68,12 @@ let OrgPage = () => {
                             <Button onClick={() => setDay(day - 1)} disabled={day === 0}>Prev</Button>
                         </Grid>
                         <Grid item xs={10}>
-                            <Typography align="center" variant="h4">{dayText[day]}</Typography>
+                            <Typography align="center" variant="h4">{days[day]}</Typography>
                         </Grid>
                         <Grid item xs={1}>
                             <Button onClick={() => setDay(day + 1)} disabled={day === 6}>Next</Button>
                         </Grid>
-                        <Grid xs={12} sx={{ my: "1rem" }}>
+                        <Grid item xs={12} sx={{ my: "1rem" }}>
                             <FormControl>
                                 <InputLabel>New Member Name</InputLabel>
                                 <Input name="member" onChange={(e) => setNewMember(e.target.value)} />
@@ -89,7 +89,7 @@ let OrgPage = () => {
                                         <TableRow>
                                             <TableCell sx={cellStyle} width="22%" />
                                             {
-                                                Array.from(Array(13).keys()).map((i, index) => (
+                                                Array.from(Array(12).keys()).map((i, index) => (
                                                     <TableCell key={index} sx={cellStyle} width="6%" align="center">
                                                         {`${i + 8}: 00`}
                                                     </TableCell>
@@ -106,15 +106,17 @@ let OrgPage = () => {
                                                             {name}
                                                         </Link>
                                                     </TableCell>
-                                                    {Array.from(Array(13).keys()).map((i, index) => (
-                                                        <TableCell key={index} sx={cellStyle}>
-                                                            <TimeFragment fragments={[
-                                                                data[name][day][i * 4],
-                                                                data[name][day][i * 4 + 1],
-                                                                data[name][day][i * 4 + 2],
-                                                                data[name][day][i * 4 + 3]]} />
-                                                        </TableCell>
-                                                    ))}
+                                                    {
+                                                        Array.from(Array(12).keys()).map((_, i) => (
+                                                            <TableCell key={i} sx={cellStyle}>
+                                                                <TimeFragment fragments={[
+                                                                    data[name][day * 48 + i * 4],
+                                                                    data[name][day * 48 + i * 4 + 1],
+                                                                    data[name][day * 48 + i * 4 + 2],
+                                                                    data[name][day * 48 + i * 4 + 3]]} />
+                                                            </TableCell>
+                                                        ))
+                                                    }
                                                 </TableRow>
                                             ))
                                         }
