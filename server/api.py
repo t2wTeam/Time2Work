@@ -38,14 +38,14 @@ async def login(organization: str):
         else:
             with open(f'./data/{organization}.json', 'w') as f:
                 content = {}
-                json.dump(content, f, indent = 4)
+                json.dump(content, f)
     return content
 
 
 @app.put("/api/{organization}/{name}")
 async def add_member(organization: str, name: str):
     if os.path.exists(f'./data/{organization}.json'):
-        with open(f'./data/{organization}.json', 'r') as f:
+        with open(f'./data/{organization}.json', mode = 'r+') as f:
             content = json.load(f)
             if name in content.keys():
                 raise HTTPException(
@@ -57,6 +57,8 @@ async def add_member(organization: str, name: str):
                 for i in range(7):
                     PersonAva.append([False] * 12 * 4)
                 content[name] = PersonAva
+                f.seek(0)
+                json.dump(content, f)
     else:
         raise HTTPException(
                         status_code=status.HTTP_400_BAD_REQUEST,
