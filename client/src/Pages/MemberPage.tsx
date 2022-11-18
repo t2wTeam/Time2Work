@@ -1,5 +1,5 @@
 import { Label } from '@mui/icons-material';
-import { Box, Container, Paper, TextField, Button, FormControl, FormHelperText, Input, InputLabel, FormControlLabel, FormLabel, Radio, RadioGroup, Checkbox, FormGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Container, Paper, TextField, Button, FormControl, FormHelperText, Input, InputLabel, FormControlLabel, FormLabel, Radio, RadioGroup, Checkbox, FormGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Autocomplete } from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { ReactNode } from 'react';
@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Items/Loading';
 import { TimeFragmentVertical } from '../Items/TimeFragment';
+import { allTime } from '../Utils/AllTime';
 
 const cellStyle = { border: "1px solid", padding: "0", height: "3rem" }
 
@@ -52,18 +53,17 @@ let MemberPage = () => {
         <Container sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
 
             {loading ? (
-
                 <Loading />
             ) : (
                 <>
                     <TableContainer >
-                        <Table size="small" sx={{border:"1px solid"}}>
+                        <Table size="small" sx={{ border: "1px solid" }}>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell sx={{borderBottom: "1px solid"}} width="16%" />
+                                    <TableCell sx={{ borderBottom: "1px solid" }} width="16%" />
                                     {
                                         days.map(d => (
-                                            <TableCell sx={{borderBottom: "1px solid"}} key={d} width="12%" align="center">
+                                            <TableCell sx={{ borderBottom: "1px solid" }} key={d} width="12%" align="center">
                                                 {d}
                                             </TableCell>
                                         ))
@@ -74,7 +74,7 @@ let MemberPage = () => {
                                 {
                                     Array.from(Array(12).keys()).map((i, index) => (
                                         <TableRow key={index}>
-                                            <TableCell sx={{borderBottom: "1px solid"}} align='center' width="16%">{`${i + 8}: 00`}</TableCell>
+                                            <TableCell sx={{ borderBottom: "1px solid" }} align='center' width="16%">{`${i + 8}: 00`}</TableCell>
                                             {
                                                 days.map((d, di) => (
                                                     <TableCell sx={cellStyle} key={d} width="12%">
@@ -96,13 +96,16 @@ let MemberPage = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <Paper sx={{ml:"2rem"}}>
+                    <Paper sx={{ ml: "2rem" }}>
                         <Box
                             padding="2rem"
                             component="form"
                             onSubmit={addTime}
                             noValidate
                             autoComplete="off"
+                            display="flex"
+                            flexWrap="wrap"
+                            alignItems="flex-end"
                         >
 
                             <FormControl>
@@ -122,6 +125,7 @@ let MemberPage = () => {
                                 <FormGroup row={true}>
                                     {dayShort.map(day => (
                                         <FormControlLabel
+                                            key={day}
                                             control={
                                                 <Checkbox name={day} />
                                             }
@@ -131,15 +135,23 @@ let MemberPage = () => {
                                 </FormGroup>
                             </FormControl>
                             <FormControl>
-                                {/*<InputLabel htmlFor="start">Start Time: </InputLabel>*/}
-                                <Input type="time" />
+                                <Autocomplete
+                                    disablePortal
+                                    options={allTime.slice(0, 48)}
+                                    sx={{ width: "10rem", padding:"0" }}
+                                    renderInput={(params) => <TextField name="start" {...params} label="Start" variant="standard"/>}
+                                />
                             </FormControl>
-                                <Typography component="span" sx={{mx:"1rem"}}>
-                                    {"—"}
-                                </Typography>
+                            <Typography component="span" sx={{ mx: "1rem"}}>
+                                {"—"}
+                            </Typography> 
                             <FormControl>
-                                {/*<InputLabel htmlFor="start">Start Time: </InputLabel>*/}
-                                <Input name="start" type="time"/>
+                                <Autocomplete
+                                    disablePortal
+                                    options={allTime.slice(0, 49)}
+                                    sx={{ width: "10rem", padding:"0" }}
+                                    renderInput={(params) => <TextField name="end" {...params} label="End" variant="standard"/>}
+                                />
                             </FormControl>
                             <FormControl>
                                 <Button sx={{ ml: "1rem" }} type="submit" variant="contained">Add</Button>
