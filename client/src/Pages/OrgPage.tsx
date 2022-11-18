@@ -1,4 +1,4 @@
-import { Box, Container, Paper, Button, FormControl, FormHelperText, Input, InputLabel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Skeleton, CircularProgress, Alert, Typography } from '@mui/material';
+import { Box, Container, Paper, Button, FormControl, FormHelperText, Input, InputLabel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Skeleton, CircularProgress, Alert, Typography, Link } from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -101,7 +101,11 @@ let OrgPage = () => {
                                         {//Maybe object should be array cuz if not, dictionary is unordered :(
                                             Object.keys(data).map((name) => (
                                                 <TableRow key={name}>
-                                                    <TableCell align="center" sx={cellStyle}>{name}</TableCell>
+                                                    <TableCell align="center" sx={cellStyle}>
+                                                        <Link href={`/${organization}/${name}`}>
+                                                            {name}
+                                                        </Link>
+                                                    </TableCell>
                                                     {Array.from(Array(13).keys()).map((i, index) => (
                                                         <TableCell key={index} sx={cellStyle}>
                                                             <TimeFragment fragments={[

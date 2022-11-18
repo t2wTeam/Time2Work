@@ -37,7 +37,7 @@ let MemberPage = () => {
         navigate("/")
     }
 
-    const days = ['MON', 'TU', 'WED', 'THUR', 'FRI', 'SAT', 'SUN']
+    const days = ['MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT', 'SUN']
 
     const addTime = () => {
         // WIP
@@ -60,14 +60,13 @@ let MemberPage = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {/* {//Maybe object should be array cuz if not, dictionary is unordered :(
-                        Object.keys(data).map((name) => (
-                            <TableRow key={name}>
-                                <TableCell align="center" sx={cellStyle}>{name}</TableCell>
-                                
-                            </TableRow>
+                    {
+                        days.map(d => (
+                            <TableCell key={d} sx={cellStyle} width="6%" align="center">
+                                {d}
+                            </TableCell>
                         ))
-                    } */}
+                    }
                 </TableBody>
             </Table>
         </TableContainer>

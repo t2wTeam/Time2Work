@@ -5,9 +5,9 @@ import { blue, red, green } from "@mui/material/colors"
 import { CssBaseline, useMediaQuery } from "@mui/material"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { ReactQueryDevtools } from "react-query/devtools"
+import { SnackbarProvider } from 'notistack';
 import HomePage from './Pages/HomePage';
 import OrgPage from './Pages/OrgPage';
-import { SnackbarProvider } from 'notistack';
 import MemberPage from "./Pages/MemberPage";
 
 
