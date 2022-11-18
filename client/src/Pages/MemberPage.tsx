@@ -6,15 +6,17 @@ import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import TimeFragment from '../Items/TimeFragment';
 
+const cellStyle = { border: "1px solid", padding: "0", height: "2rem" }
+
 let MemberPage = () => {
     let { enqueueSnackbar } = useSnackbar()
-    let { organization, name } = useParams()
+    let { organization, user } = useParams()
     let navigate = useNavigate()
 
     let { isLoading: loading, error: error, data: data, } = useQuery(
-        ["get-organization-times", organization],
+        ["get-member", user],
         async () => {
-            let r = await axios.get(`/api/${organization}/${}`)
+            let r = await axios.get(`/api/${organization}/${user}`)
             return r.data
         },
         {
@@ -28,7 +30,7 @@ let MemberPage = () => {
             e.response.status === 400 && e.response.data.detail ? (
                 e.response.data.detail
             ) : (
-                "Something has gone wrong. Maybe the organization name is invalid! "
+                "Something has gone wrong. Maybe the organization/member name is invalid! "
             ),
             { variant: 'error' }
         )
@@ -37,6 +39,9 @@ let MemberPage = () => {
 
     const days = ['MON', 'TU', 'WED', 'THUR', 'FRI', 'SAT', 'SUN']
 
+    const addTime = () => {
+
+    }
 
 
     return (
@@ -45,11 +50,10 @@ let MemberPage = () => {
             <Table size="medium">
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={cellStyle} width="22%" />
                         {
-                            Array.from(Array(13).keys()).map((i, index) => (
-                                <TableCell key={index} sx={cellStyle} width="6%" align="center">
-                                    {`${i + 8}: 00`}
+                            days.map(d => (
+                                <TableCell key={d} sx={cellStyle} width="6%" align="center">
+                                    {d}
                                 </TableCell>
                             ))
                         }
@@ -60,15 +64,7 @@ let MemberPage = () => {
                         Object.keys(data).map((name) => (
                             <TableRow key={name}>
                                 <TableCell align="center" sx={cellStyle}>{name}</TableCell>
-                                {Array.from(Array(13).keys()).map((i, index) => (
-                                    <TableCell key={index} sx={cellStyle}>
-                                        <TimeFragment fragments={[
-                                            data[name][day][i * 4],
-                                            data[name][day][i * 4 + 1],
-                                            data[name][day][i * 4 + 2],
-                                            data[name][day][i * 4 + 3]]} />
-                                    </TableCell>
-                                ))}
+                                
                             </TableRow>
                         ))
                     }
@@ -78,7 +74,7 @@ let MemberPage = () => {
         <Container style={{ height: "90vh", minWidth: "90%", marginTop: "2rem" }} >
           <Box
                 component="form"
-                onSubmit={submit}
+                onSubmit={addTime}
                 noValidate
                 autoComplete="off"
             >

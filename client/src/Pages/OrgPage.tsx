@@ -42,7 +42,7 @@ let OrgPage = () => {
         navigate("/")
     }
 
-    const mutation = useMutation(async (member: String) => {
+    const mutation = useMutation(async (member: string) => {
         return axios.put(`/api/${organization}/${member}`)
     },
         {
