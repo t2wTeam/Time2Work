@@ -10,13 +10,13 @@ const cellStyle = { border: "1px solid", padding: "0", height: "2rem" }
 
 let MemberPage = () => {
     let { enqueueSnackbar } = useSnackbar()
-    let { organization, user } = useParams()
+    let { organization, name } = useParams()
     let navigate = useNavigate()
 
     let { isLoading: loading, error: error, data: data, } = useQuery(
-        ["get-member", user],
+        ["get-member", name],
         async () => {
-            let r = await axios.get(`/api/${organization}/${user}`)
+            let r = await axios.get(`/api/${organization}/${name}`)
             return r.data
         },
         {
@@ -40,7 +40,7 @@ let MemberPage = () => {
     const days = ['MON', 'TU', 'WED', 'THUR', 'FRI', 'SAT', 'SUN']
 
     const addTime = () => {
-
+        // WIP
     }
 
 
@@ -60,14 +60,14 @@ let MemberPage = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {//Maybe object should be array cuz if not, dictionary is unordered :(
+                    {/* {//Maybe object should be array cuz if not, dictionary is unordered :(
                         Object.keys(data).map((name) => (
                             <TableRow key={name}>
                                 <TableCell align="center" sx={cellStyle}>{name}</TableCell>
                                 
                             </TableRow>
                         ))
-                    }
+                    } */}
                 </TableBody>
             </Table>
         </TableContainer>
