@@ -5,7 +5,7 @@ from api import app as api_app
 import os
 import logging
 
-PUBLIC_DIRECTORY = "../client/build"
+PUBLIC_DIRECTORY = "client/build"
 
 app = FastAPI()
 app.include_router(api_app)
