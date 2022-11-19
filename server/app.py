@@ -13,6 +13,9 @@ app.include_router(api_app)
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
+if os.path.exists("/data"):
+    os.mkdir("/data")
+
 
 @app.get("/")
 async def root():
