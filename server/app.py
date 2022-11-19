@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from server.api import app as api_app
+from api import app as api_app
 import os
 import logging
 
@@ -13,8 +13,8 @@ app.include_router(api_app)
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
-if os.path.exists("/data"):
-    os.mkdir("/data")
+if os.path.exists("./data/"):
+    os.mkdir("./data")
 
 
 @app.get("/")
