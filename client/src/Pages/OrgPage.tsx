@@ -89,12 +89,6 @@ let OrgPage = () => {
                         <Grid item xs={1}>
                             <Button onClick={() => setDay(day + 1)} disabled={day === 6}>Next</Button>
                         </Grid>
-                        {/* <Grid item xs={12} sx={{ my: "1rem" }}>
-                            
-                            <FormControl>
-                                <Button sx={{ ml: "1rem" }} type="submit" variant="outlined" onClick={addMember}>Add!</Button>
-                            </FormControl>
-                        </Grid> */}
                         <Grid item xs={12}>
                             <TableContainer>
                                 <Table size="medium">

@@ -7,6 +7,7 @@ import os
 log = getLogger(__name__)
 app = APIRouter()
 
+
 class AddTimeModel(BaseModel):
     available: bool
     days: list[bool]
@@ -14,14 +15,15 @@ class AddTimeModel(BaseModel):
     end: str
 
 
-def new_overlap(A_matx,B_matx):
+def new_overlap(A_matx, B_matx):
     container = [[] for i in range(7)]
     for index, list_zip in enumerate(zip(A_matx, B_matx)):
         # print("current list_zip is ", list_zip)
-        for i,j in zip(list_zip[0],list_zip[1]):
+        for i, j in zip(list_zip[0], list_zip[1]):
             # print("current i,j is", i,j)
-            container[index].append( (not i ^ j) and i != 0)
+            container[index].append((not i ^ j) and i != 0)
     return container
+
 
 @app.get("/api/{organization}")
 async def login(organization: str):
@@ -33,7 +35,7 @@ async def login(organization: str):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Organization name invalid."
-                )
+            )
         else:
             with open(f'./data/{organization}.json', 'w') as f:
                 content = {}
@@ -44,112 +46,100 @@ async def login(organization: str):
 @app.put("/api/{organization}/{name}")
 async def add_member(organization: str, name: str):
     if os.path.exists(f'./data/{organization}.json'):
-        with open(f'./data/{organization}.json', mode = 'r+') as f:
+        with open(f'./data/{organization}.json', mode='r+') as f:
             content = json.load(f)
             if name in content.keys():
                 raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail="Name exists."
-                        )
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Name exists."
+                )
             else:
                 PersonAva = []
-                for i in range(7*4*12):
+                for i in range(7 * 4 * 12):
                     PersonAva.append(False)
                 content[name] = PersonAva
                 f.seek(0)
                 json.dump(content, f)
     else:
         raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail="Organization doesn't exist."
-                        )
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Organization doesn't exist."
+        )
 
-    
 
 @app.get("/api/{organization}/{name}")
 async def get_member(organization: str, name: str):
     if os.path.exists(f'./data/{organization}.json'):
         with open(f'./data/{organization}.json', 'r') as f:
-            content = json.load(f)      
+            content = json.load(f)
             if name not in content.keys():
                 raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail="Name not found."
-                        )
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Name not found."
+                )
             else:
                 return content[name]
     else:
         raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail="Organization doesn't exist."
-                        )
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Organization doesn't exist."
+        )
 
 
 @app.delete("/api/{organization}/{name}")
 async def del_member(organization: str, name: str):
     if os.path.exists(f'./data/{organization}.json'):
-        with open(f'./data/{organization}.json', mode = 'r+') as f:
+        with open(f'./data/{organization}.json', mode='r+') as f:
             content = json.load(f)
             if name not in content.keys():
                 raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail="Name does exists."
-                        )
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Name does exists."
+                )
             else:
-                del content[name] # Is this correct?
-                log.info(content)
+                del content[name]  # Is this correct?
                 f.seek(0)
                 json.dump(content, f)
                 f.truncate()
     else:
         raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail="Organization doesn't exist."
-                        )
-        
-        
-# @app.post("/api/{organization}/{name}")
-# async def add_time(organization: str, name: str, time: AddTimeModel):
-#     if os.path.exists(f'{organization}.json'):
-#         with open(f'{organization}.json', 'r') as f:
-#             content = json.load(f)
-#             inputTime = [False] * 12 * 4
-#             inputTime[time.startIndex:(time.endIndex + 1)] = [True]*((time.endIndex+1)-time.startIndex)
-#             for i in range(7):
-#                 if time.days[i] == True:
-#                     if time.available == True:
-#                         content[name][i] =  content[name][i] or inputTime
-#                     else:
-#                         content[name][i] =  content[name][i] and inputTime
-#     else:
-#         raise HTTPException(
-#                         status_code=status.HTTP_400_BAD_REQUEST,
-#                         detail="Organization doesn't exist."
-#                         )
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Organization doesn't exist."
+        )
 
-        
-       
+
+
 @app.post("/api/{organization}/{name}")
-async def add_time(organization: str, name: str, time: AddTimeModel):
-    if os.path.exists(f'{organization}.json'):
-        with open(f'{organization}.json', 'r') as f:
+async def add_time(organization: str, name: str, data: AddTimeModel = Body(embed=True)):
+    if os.path.exists(f'./data/{organization}.json'):
+        with open(f'./data/{organization}.json', 'r+') as f:
             # Load file and store the paras as int
             # i.e. "8:15" --> 0,1
-            content = json.load(f)
-            start_hour, start_min = [int(i) for i in time.start.split(":")]
-            end_hour, end_min = [int(i) for i in time.end.split(":")]
-            start_hour -= 8; end_hour -= 8
-            start_min /= 15; end_min /= 15
+            content:dict = json.load(f)
 
-            if(start_hour > end_hour or (start_hour==end_hour and start_min>end_min)):
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                                    detail="Start time should be no later than end time")
+            for i in range(7):
+                if not data.days[i]:
+                    continue
+                start_hour, start_min = [int(i) for i in data.start.split(":")]
+                end_hour, end_min = [int(i) for i in data.end.split(":")]
+                start_hour -= 8
+                end_hour -= 8
+                start_min //= 15
+                end_min //= 15
 
-            content = [not time.available] * 12 * 4
-            content[start_hour*4+start_min:end_hour*4+end_min+1] = time.available
+
+                start = i*48 + start_hour * 4 + start_min
+                end = i*48 + end_hour * 4 + end_min
+                if (end < start):
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                        detail="Start time should be no later than end time")
+                # content[name] = [not data.available] * 12 * 4
+                content[name][start : end] = [data.available]* (end-start)
+                f.seek(0)
+                json.dump(content, f)
+                f.truncate()
 
     else:
         raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail="Organization doesn't exist."
-                        )
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Organization doesn't exist.")
