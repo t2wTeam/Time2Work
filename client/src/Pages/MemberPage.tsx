@@ -10,13 +10,13 @@ import { TimeFragmentVertical } from '../Items/TimeFragment';
 import { allTime } from '../Utils/AllTime';
 
 const cellStyle = { border: "1px solid", padding: "0", height: "3rem" }
-
+const defaultDays = [false, false, false, false, false, false, false]
 let MemberPage = () => {
     let { enqueueSnackbar } = useSnackbar()
     let { organization, name } = useParams()
     let navigate = useNavigate()
     const queryClient = useQueryClient()
-    const [selectedDays, setSelectedDays] = useState([false, false, false, false, false, false, false])
+    const [selectedDays, setSelectedDays] = useState(defaultDays)
 
     let { isLoading: loading, error: error, data: data, } = useQuery(
         ["get-member", name],
@@ -72,15 +72,24 @@ let MemberPage = () => {
             start: e.target.start.value,
             end: e.target.end.value,
         }
-        console.log(data)
+
+        if (e.target.start.value === "" || e.target.end.value === ""){
+            enqueueSnackbar(
+                "Name cannot be empty",
+                { variant: 'error' }
+            )
+            return
+        }
         mutation.mutate(data)
+        e.target.start.value = "12:00"
+        e.target.end.value = "12:15"
     }
 
 
 
     return (
         <Container sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <Button onClick={() => { navigate(`/${organization}`) }} sx={{ position: "absolute", left: "4rem", top: "2rem" }}>Back</Button>
+            <Button onClick={() => { navigate(`/${organization}`) }} sx={{ position: "absolute", left: "3rem", top: "2rem" }}>Back</Button>
             {loading ? (
                 <Loading />
             ) : (
@@ -89,7 +98,7 @@ let MemberPage = () => {
                         <Table size="small" sx={{ border: "1px solid" }}>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell sx={{ borderBottom: "1px solid" }} width="16%" />
+                                    <TableCell sx={{ borderBottom: "1px solid", paddingX: "1rem" }} width="16%" />
                                     {
                                         days.map(d => (
                                             <TableCell sx={{ borderBottom: "1px solid" }} key={d} width="12%" align="center">

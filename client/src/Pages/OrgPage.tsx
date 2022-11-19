@@ -75,6 +75,12 @@ let OrgPage = () => {
 
     const addMember = (e:any) => {
         e.preventDefault()
+        if (e.target.member.value === ""){
+            enqueueSnackbar(
+                "Name cannot be empty",
+                { variant: 'error' }
+            )
+        }
         addmutation.mutate(e.target.member.value)
         e.target.member.value = ""
         // addmutation.mutate(newMember.current?.value)
@@ -88,7 +94,7 @@ let OrgPage = () => {
 
     return (
         <Container sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-            <Button onClick={() => { navigate(`/`) }} sx={{ position: "absolute", left: "4rem", top: "2rem" }}>Back</Button>
+            <Button onClick={() => { navigate(`/`) }} sx={{ position: "absolute", left: "3rem", top: "2rem" }}>Back</Button>
             {loading ? (
                 <Loading />
             ) : (
