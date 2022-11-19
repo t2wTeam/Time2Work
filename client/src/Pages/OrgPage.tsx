@@ -16,7 +16,7 @@ let OrgPage = () => {
     let { organization } = useParams()
     let navigate = useNavigate()
     const days = ['Monday', "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    const [day, setDay] = useState(0); // 0-6
+    const [day, setDay] = useState((new Date().getDay() + 6) % 7); // 0-6
     // const [newMember, setNewMember] = useState("");
     const newMember = useRef<TextFieldProps>(null)
     const queryClient = useQueryClient()
