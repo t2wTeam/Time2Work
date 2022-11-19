@@ -10,9 +10,8 @@ app = APIRouter()
 class AddTimeModel(BaseModel):
     available: bool
     days: list[bool]
-    startIndex: int
-    endIndex: int
-
+    start: str
+    end: str
 
 
 def new_overlap(A_matx,B_matx):
@@ -86,22 +85,71 @@ async def get_member(organization: str, name: str):
                         )
 
 
-@app.post("/api/{organization}/{name}")
-async def add_time(organization: str, name: str, time: AddTimeModel):
-    if os.path.exists(f'{organization}.json'):
-        with open(f'{organization}.json', 'r') as f:
+@app.delete("/api/{organization}/{name}")
+async def del_member(organization: str, name: str):
+    if os.path.exists(f'./data/{organization}.json'):
+        with open(f'./data/{organization}.json', mode = 'r+') as f:
             content = json.load(f)
-            inputTime = [False] * 12 * 4
-            inputTime[time.startIndex:(time.endIndex + 1)] = [True]*((time.endIndex+1)-time.startIndex)
-            for i in range(7):
-                if time.days[i] == True:
-                    if time.available == True:
-                        content[name][i] =  content[name][i] or inputTime
-                    else:
-                        content[name][i] =  content[name][i] and inputTime
+            if name not in content.keys():
+                raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Name does exists."
+                        )
+            else:
+                del content[name] # Is this correct?
+                log.info(content)
+                f.seek(0)
+                json.dump(content, f)
+                f.truncate()
     else:
         raise HTTPException(
                         status_code=status.HTTP_400_BAD_REQUEST,
                         detail="Organization doesn't exist."
                         )
+        
+        
+# @app.post("/api/{organization}/{name}")
+# async def add_time(organization: str, name: str, time: AddTimeModel):
+#     if os.path.exists(f'{organization}.json'):
+#         with open(f'{organization}.json', 'r') as f:
+#             content = json.load(f)
+#             inputTime = [False] * 12 * 4
+#             inputTime[time.startIndex:(time.endIndex + 1)] = [True]*((time.endIndex+1)-time.startIndex)
+#             for i in range(7):
+#                 if time.days[i] == True:
+#                     if time.available == True:
+#                         content[name][i] =  content[name][i] or inputTime
+#                     else:
+#                         content[name][i] =  content[name][i] and inputTime
+#     else:
+#         raise HTTPException(
+#                         status_code=status.HTTP_400_BAD_REQUEST,
+#                         detail="Organization doesn't exist."
+#                         )
 
+        
+       
+@app.post("/api/{organization}/{name}")
+async def add_time(organization: str, name: str, time: AddTimeModel):
+    if os.path.exists(f'{organization}.json'):
+        with open(f'{organization}.json', 'r') as f:
+            # Load file and store the paras as int
+            # i.e. "8:15" --> 0,1
+            content = json.load(f)
+            start_hour, start_min = [int(i) for i in time.start.split(":")]
+            end_hour, end_min = [int(i) for i in time.end.split(":")]
+            start_hour -= 8; end_hour -= 8
+            start_min /= 15; end_min /= 15
+
+            if(start_hour > end_hour or (start_hour==end_hour and start_min>end_min)):
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                    detail="Start time should be no later than end time")
+
+            content = [not time.available] * 12 * 4
+            content[start_hour*4+start_min:end_hour*4+end_min+1] = time.available
+
+    else:
+        raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Organization doesn't exist."
+                        )
