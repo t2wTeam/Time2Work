@@ -5,8 +5,8 @@ let HomePage = () => {
     const navigate = useNavigate()
 
     const submit = (e: any) => {
-        if (e.target.orgName.value === ""){alert("Please entre your organization name to continue");}
-        else{
+        if (e.target.orgName.value === "") { alert("Please entre your organization name to continue"); }
+        else {
             e && e.preventDefault();
             navigate(`/${e.target.orgName.value}`)
         }
@@ -15,7 +15,11 @@ let HomePage = () => {
 
     return (
 
-        <Container sx={{ height: "100%", width: "100%", display: "flex", justifyContent: "center"}}>
+        <Container sx={{ height: "100%", width: "100%", display: "flex", justifyContent: "center" }}>
+            <Box className ="content" display="flex" justifyContent="center">
+                <h2>Time2Work</h2>
+                <h2>Time2Work</h2>
+            </Box>
             <Box
                 component="form"
                 onSubmit={submit}
@@ -30,7 +34,7 @@ let HomePage = () => {
                     <FormHelperText id="help-text">Please Input Organization Name</FormHelperText>
                 </FormControl>
                 <FormControl>
-                    <Button sx={{ml: "1rem"}} type="submit" variant="contained">GO</Button>
+                    <Button sx={{ ml: "1rem" }} type="submit" variant="contained">GO</Button>
                 </FormControl>
             </Box>
         </Container>

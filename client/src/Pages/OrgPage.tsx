@@ -90,7 +90,7 @@ let OrgPage = () => {
                         <Grid item xs={12} sx={{ my: "1rem" }}>
                             <FormControl>
                                 <InputLabel>New Member Name</InputLabel>
-                                <Input name="member" onChange={(e) => setNewMember(e.target.value)} />
+                                <Input name="member" />
                             </FormControl>
                             <FormControl>
                                 <Button sx={{ ml: "1rem" }} type="submit" variant="outlined" onClick={addMember}>Add!</Button>

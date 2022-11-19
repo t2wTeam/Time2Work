@@ -16,7 +16,7 @@ let MemberPage = () => {
     let { organization, name } = useParams()
     let navigate = useNavigate()
     const queryClient = useQueryClient()
-    const [selectedDays, setSelectedDays] = useState([false, false, false, false, false, false, false]) 
+    const [selectedDays, setSelectedDays] = useState([false, false, false, false, false, false, false])
 
     let { isLoading: loading, error: error, data: data, } = useQuery(
         ["get-member", name],
@@ -46,24 +46,23 @@ let MemberPage = () => {
     const dayShort = ['M', 'TU', 'W', 'TH', 'F', 'SA', 'SU']
 
     const mutation = useMutation(async (data: any) => {
-        return axios.post(`/api/${organization}/${name}`, data)
+        return axios.post(`/api/${organization}/${name}`, {"data": data})
     },
-    {
-        onSuccess: () => {
-            queryClient.invalidateQueries("get-member")
-        },
-        onError: (error: any, variables, context) => {
-            enqueueSnackbar(
-                error.response.data.detail ? (
-                    error.response.data.detail
-                ) : (
-                    "Something has gone wrong. Maybe the organization/member name is invalid! "
-                ),
-                { variant: 'error' }
-            )
-            navigate("/")
-        }
-    })
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries("get-member")
+            },
+            onError: (error: any, variables, context) => {
+                enqueueSnackbar(
+                    error.response.data.detail ? (
+                        error.response.data.detail
+                    ) : (
+                        "Something has gone wrong. Maybe the organization/member name is invalid! "
+                    ),
+                    { variant: 'error' }
+                )
+            }
+        })
 
     const addTime = (e: any) => {
         e.preventDefault()
@@ -81,7 +80,7 @@ let MemberPage = () => {
 
     return (
         <Container sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-
+            <Button onClick={() => { navigate(`/${organization}`) }} sx={{ position: "absolute", left: "4rem", top: "2rem" }}>Back</Button>
             {loading ? (
                 <Loading />
             ) : (
@@ -137,16 +136,20 @@ let MemberPage = () => {
                             flexWrap="wrap"
                             alignItems="flex-end"
                         >
-
+                            <Box width="100%" display="flex"  pb="2rem">
+                                <Typography variant="h5">
+                                    {organization}: {name}
+                                </Typography>
+                            </Box>
                             <FormControl>
                                 <FormLabel id="available-label">Availability</FormLabel>
                                 <RadioGroup
                                     row={true}
                                     aria-labelledby="available-label"
-                                    defaultValue="available"
+                                    defaultValue={true}
                                     name="availablegroup"
                                 >
-                                    <FormControlLabel value={true} control={<Radio />} label="Available" />
+                                    <FormControlLabel value={true} control={<Radio/>} label="Available" />
                                     <FormControlLabel value={false} control={<Radio />} label="Unavailable" />
                                 </RadioGroup>
                             </FormControl>
@@ -159,8 +162,8 @@ let MemberPage = () => {
                                             control={
                                                 <Checkbox name={day} onChange={(e) => {
                                                     selectedDays[index] = e.target.checked
-                                                    setSelectedDays(selectedDays) 
-                                                }}/>
+                                                    setSelectedDays(selectedDays)
+                                                }} />
                                             }
                                             label={day}
                                         />
@@ -171,19 +174,19 @@ let MemberPage = () => {
                                 <Autocomplete
                                     disablePortal
                                     options={allTime.slice(0, 48)}
-                                    sx={{ width: "10rem", padding:"0" }}
-                                    renderInput={(params) => <TextField name="start" {...params} label="Start" variant="standard"/>}
+                                    sx={{ width: "10rem", padding: "0" }}
+                                    renderInput={(params) => <TextField name="start" {...params} label="Start" variant="standard" />}
                                 />
                             </FormControl>
-                            <Typography component="span" sx={{ mx: "1rem"}}>
+                            <Typography component="span" sx={{ mx: "1rem" }}>
                                 {"—"}
-                            </Typography> 
+                            </Typography>
                             <FormControl>
                                 <Autocomplete
                                     disablePortal
                                     options={allTime.slice(0, 49)}
-                                    sx={{ width: "10rem", padding:"0" }}
-                                    renderInput={(params) => <TextField name="end" {...params} label="End" variant="standard"/>}
+                                    sx={{ width: "10rem", padding: "0" }}
+                                    renderInput={(params) => <TextField name="end" {...params} label="End" variant="standard" />}
                                 />
                             </FormControl>
                             <FormControl>
