@@ -1,12 +1,13 @@
-import { Box, Container, Paper, Button, FormControl, FormHelperText, Input, InputLabel, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Skeleton, CircularProgress, Alert, Typography, Link, Slide } from '@mui/material';
+import { Box, Container, Paper, Button, FormControl, FormHelperText, Input, InputLabel, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Skeleton, CircularProgress, Alert, Typography, Link, Slide, TextField, TextFieldProps } from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Items/Loading';
 import { TimeFragment } from '../Items/TimeFragment';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import AddIcon from '@mui/icons-material/Add';
 
 const cellStyle = { border: "1px solid", padding: "0", height: "2rem" }
 
@@ -16,7 +17,8 @@ let OrgPage = () => {
     let navigate = useNavigate()
     const days = ['Monday', "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     const [day, setDay] = useState(0); // 0-6
-    const [newMember, setNewMember] = useState("");
+    // const [newMember, setNewMember] = useState("");
+    const newMember = useRef<TextFieldProps>(null)
     const queryClient = useQueryClient()
 
     let { isLoading: loading, error: error, data: data, } = useQuery(
@@ -62,7 +64,7 @@ let OrgPage = () => {
     })
 
     const addMember = () => {
-        addmutation.mutate(newMember)
+        // addmutation.mutate(newMember.current?.value)
     }
 
     const delMember = (name: string) => {
@@ -87,15 +89,12 @@ let OrgPage = () => {
                         <Grid item xs={1}>
                             <Button onClick={() => setDay(day + 1)} disabled={day === 6}>Next</Button>
                         </Grid>
-                        <Grid item xs={12} sx={{ my: "1rem" }}>
-                            <FormControl>
-                                <InputLabel>New Member Name</InputLabel>
-                                <Input name="member" onChange={(e) => setNewMember(e.target.value)} />
-                            </FormControl>
+                        {/* <Grid item xs={12} sx={{ my: "1rem" }}>
+                            
                             <FormControl>
                                 <Button sx={{ ml: "1rem" }} type="submit" variant="outlined" onClick={addMember}>Add!</Button>
                             </FormControl>
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={12}>
                             <TableContainer>
                                 <Table size="medium">
@@ -141,6 +140,18 @@ let OrgPage = () => {
                                                 </TableRow>
                                             ))
                                         }
+                                        <TableRow>
+                                            <TableCell align="center" sx={cellStyle}>
+                                                <IconButton aria-label="Create" onClick={addMember}>
+                                                    <AddIcon/>
+                                                </IconButton>
+                                            </TableCell>
+                                            <TableCell align="center" sx={cellStyle}>
+                                                <FormControl>
+                                                    <TextField hiddenLabel id="standard-basic" variant="filled" size="small"/>
+                                                </FormControl>
+                                            </TableCell>
+                                        </TableRow>
                                     </TableBody>
                                 </Table>
                             </TableContainer>
