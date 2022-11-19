@@ -1,4 +1,4 @@
-import { Box, Container, Paper, Button, FormControl, FormHelperText, Input, InputLabel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Skeleton, CircularProgress, Alert, Typography, Link, Slide } from '@mui/material';
+import { Box, Container, Paper, Button, FormControl, FormHelperText, Input, InputLabel, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Skeleton, CircularProgress, Alert, Typography, Link, Slide } from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Items/Loading';
 import { TimeFragment } from '../Items/TimeFragment';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 const cellStyle = { border: "1px solid", padding: "0", height: "2rem" }
 
@@ -42,7 +43,7 @@ let OrgPage = () => {
         navigate("/")
     }
 
-    const mutation = useMutation(async (member: string) => {
+    const addmutation = useMutation(async (member: string) => {
         return axios.put(`/api/${organization}/${member}`)
     },
     {
@@ -51,8 +52,21 @@ let OrgPage = () => {
         }
     })
 
+    const delmutation = useMutation(async (member: string) => {
+        return axios.delete(`/api/${organization}/${member}`)
+    },
+    {
+        onSuccess: () => {
+            queryClient.invalidateQueries("get-organization-times")
+        }
+    })
+
     const addMember = () => {
-        mutation.mutate(newMember)
+        addmutation.mutate(newMember)
+    }
+
+    const delMember = (name: string) => {
+        delmutation.mutate(name)
     }
 
 
@@ -87,7 +101,8 @@ let OrgPage = () => {
                                 <Table size="medium">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell sx={cellStyle} width="22%" />
+                                            <TableCell sx={cellStyle} width="4%" />
+                                            <TableCell sx={cellStyle} width="18%" />
                                             {
                                                 Array.from(Array(12).keys()).map((i, index) => (
                                                     <TableCell key={index} sx={cellStyle} width="6%" align="center">
@@ -102,7 +117,13 @@ let OrgPage = () => {
                                             Object.keys(data).map((name) => (
                                                 <TableRow key={name}>
                                                     <TableCell align="center" sx={cellStyle}>
+                                                        <IconButton aria-label="Delete" onClick={() => delMember(name)}>
+                                                          <DeleteOutlinedIcon/>
+                                                        </IconButton>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={cellStyle}>
                                                         <Link href={`/${organization}/${name}`}>
+                                                        
                                                             {name}
                                                         </Link>
                                                     </TableCell>
