@@ -88,6 +88,7 @@ let OrgPage = () => {
 
     return (
         <Container sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+            <Button onClick={() => { navigate(`/`) }} sx={{ position: "absolute", left: "4rem", top: "2rem" }}>Back</Button>
             {loading ? (
                 <Loading />
             ) : (
