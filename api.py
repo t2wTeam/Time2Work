@@ -110,7 +110,7 @@ async def del_member(organization: str, name: str):
 
 
 @app.post("/api/{organization}/{name}")
-async def add_time(organization: str, name: str, data: AddTimeModel = Body(embed=True)):
+async def add_time(organization: str, name: str, data: AddTimeModel = Body(default=None, embed=True)):
     if os.path.exists(f'./data/{organization}.json'):
         with open(f'./data/{organization}.json', 'r+') as f:
             # Load file and store the paras as int
