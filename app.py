@@ -5,7 +5,7 @@ from api import app as api_app
 import os
 import logging
 
-PUBLIC_DIRECTORY = "client/build"
+PUBLIC_DIRECTORY = "./client/build"
 
 app = FastAPI()
 app.include_router(api_app)
@@ -28,6 +28,10 @@ async def file(file:str, ext: str):
 
 @app.get("/{path}")
 async def path():
+    return FileResponse(f"{PUBLIC_DIRECTORY}/index.html")
+
+@app.get("/{path}/{name}")
+async def path_name():
     return FileResponse(f"{PUBLIC_DIRECTORY}/index.html")
 
 app.mount("/", StaticFiles(directory=PUBLIC_DIRECTORY), name="public")
