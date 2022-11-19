@@ -97,7 +97,7 @@ let OrgPage = () => {
                         <Grid item xs={1}>
                             <Button onClick={() => setDay(day - 1)} disabled={day === 0}>Prev</Button>
                         </Grid>
-                        <Grid item xs={10}>
+                        <Grid item xs={10} mb="1rem">
                             <Typography align="center" variant="h4">{days[day]}</Typography>
                         </Grid>
                         <Grid item xs={1}>
