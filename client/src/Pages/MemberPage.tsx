@@ -51,6 +51,17 @@ let MemberPage = () => {
     {
         onSuccess: () => {
             queryClient.invalidateQueries("get-member")
+        },
+        onError: (error: any, variables, context) => {
+            enqueueSnackbar(
+                error.response.data.detail ? (
+                    error.response.data.detail
+                ) : (
+                    "Something has gone wrong. Maybe the organization/member name is invalid! "
+                ),
+                { variant: 'error' }
+            )
+            navigate("/")
         }
     })
 
