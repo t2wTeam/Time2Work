@@ -48,22 +48,35 @@ let OrgPage = () => {
     const addmutation = useMutation(async (member: string) => {
         return axios.put(`/api/${organization}/${member}`)
     },
-    {
-        onSuccess: () => {
-            queryClient.invalidateQueries("get-organization-times")
-        }
-    })
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries("get-organization-times")
+            },
+            onError: (error: any, variables, context) => {
+                enqueueSnackbar(
+                    error.response.data.detail ? (
+                        error.response.data.detail
+                    ) : (
+                        "Something has gone wrong."
+                    ),
+                    { variant: 'error' }
+                )
+            }
+        })
 
     const delmutation = useMutation(async (member: string) => {
         return axios.delete(`/api/${organization}/${member}`)
     },
-    {
-        onSuccess: () => {
-            queryClient.invalidateQueries("get-organization-times")
-        }
-    })
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries("get-organization-times")
+            }
+        })
 
-    const addMember = () => {
+    const addMember = (e:any) => {
+        e.preventDefault()
+        addmutation.mutate(e.target.member.value)
+        e.target.member.value = ""
         // addmutation.mutate(newMember.current?.value)
     }
 
@@ -78,7 +91,7 @@ let OrgPage = () => {
             {loading ? (
                 <Loading />
             ) : (
-                <>
+                <form onSubmit={addMember}>
                     <Grid container component={Paper} elevation={5} sx={{ padding: "2rem", margin: "1rem" }}>
                         <Grid item xs={1}>
                             <Button onClick={() => setDay(day - 1)} disabled={day === 0}>Prev</Button>
@@ -111,12 +124,12 @@ let OrgPage = () => {
                                                 <TableRow key={name}>
                                                     <TableCell align="center" sx={cellStyle}>
                                                         <IconButton aria-label="Delete" onClick={() => delMember(name)}>
-                                                          <DeleteOutlinedIcon/>
+                                                            <DeleteOutlinedIcon />
                                                         </IconButton>
                                                     </TableCell>
                                                     <TableCell align="center" sx={cellStyle}>
                                                         <Link href={`/${organization}/${name}`}>
-                                                        
+
                                                             {name}
                                                         </Link>
                                                     </TableCell>
@@ -134,24 +147,28 @@ let OrgPage = () => {
                                                 </TableRow>
                                             ))
                                         }
-                                        <TableRow>
+                                        
+                                        <TableRow >
                                             <TableCell align="center" sx={cellStyle}>
-                                                <IconButton aria-label="Create" onClick={addMember}>
-                                                    <AddIcon/>
-                                                </IconButton>
+                                                <FormControl>
+                                                    <IconButton aria-label="Create" type="submit">
+                                                        <AddIcon />
+                                                    </IconButton>
+                                                </FormControl>
                                             </TableCell>
                                             <TableCell align="center" sx={cellStyle}>
                                                 <FormControl>
-                                                    <TextField hiddenLabel id="standard-basic" variant="filled" size="small"/>
+                                                    <TextField hiddenLabel name="member" variant="filled" size="small" />
                                                 </FormControl>
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>
+                                    
                                 </Table>
                             </TableContainer>
                         </Grid>
                     </Grid>
-                </>
+                </form>
             )}
         </Container>
     )
