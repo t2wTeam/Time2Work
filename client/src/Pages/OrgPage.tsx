@@ -80,6 +80,7 @@ let OrgPage = () => {
                 "Name cannot be empty",
                 { variant: 'error' }
             )
+            return
         }
         addmutation.mutate(e.target.member.value)
         e.target.member.value = ""
