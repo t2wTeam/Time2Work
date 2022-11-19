@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from api import app as api_app
+from server.api import app as api_app
 import os
 import logging
 
