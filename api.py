@@ -130,7 +130,7 @@ async def add_time(organization: str, name: str, data: AddTimeModel = Body(defau
 
                 start = i*48 + start_hour * 4 + start_min
                 end = i*48 + end_hour * 4 + end_min
-                if (end < start):
+                if (end <= start):
                     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                         detail="Start time should be no later than end time")
                 # content[name] = [not data.available] * 12 * 4

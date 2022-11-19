@@ -75,6 +75,12 @@ let OrgPage = () => {
 
     const addMember = (e:any) => {
         e.preventDefault()
+        if (e.target.member.value === ""){
+            enqueueSnackbar(
+                "Name cannot be empty",
+                { variant: 'error' }
+            )
+        }
         addmutation.mutate(e.target.member.value)
         e.target.member.value = ""
         // addmutation.mutate(newMember.current?.value)
