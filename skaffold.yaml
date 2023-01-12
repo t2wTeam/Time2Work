@@ -1,0 +1,21 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: time2work
+build:
+  artifacts:
+    - image: 130.61.18.157:5001/time2work
+      docker:
+        dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+      - k8s/deployment.yaml
+      - k8s/service.yaml
+      - k8s/router.yaml
+profiles:
+  - name: build
+    build:
+      local:
+        useBuildkit: true
+        push: true

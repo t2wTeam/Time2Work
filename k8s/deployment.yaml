@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: pv-volume
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/t2wvol"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-claim
+spec:
+  storageClassName: pv-volume
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: time2work
+spec:
+  selector:
+    matchLabels:
+      app: time2work
+  template:
+    metadata:
+      labels:
+        app: time2work
+    spec:
+      containers:
+        - name: time2work
+          image: 130.61.18.157:5001/time2work
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: data
+              mountPath: /code/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pv-claim

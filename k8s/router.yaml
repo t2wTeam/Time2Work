@@ -1,0 +1,11 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+ name: time2work
+
+spec:
+  defaultBackend:
+    service:
+      name: time2work
+      port:
+        number: 80
