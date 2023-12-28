@@ -31,8 +31,8 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "build:local": "set BUILD_PATH=../build && react-scripts build",
-        "server:local": "python",
+        "build:local": "set BUILD_PATH=../server/build&&react-scripts build",
+        "server:local": "cd ../server&&py main.py",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
