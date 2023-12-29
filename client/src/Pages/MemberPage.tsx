@@ -85,6 +85,15 @@ let MemberPage = () => {
         e.target.end.value = "12:15"
     }
 
+    const getTimeLabel = (hourIndex: number) => {
+        const hour = hourIndex + 8; // Convert index to hour (8 AM to 5 PM)
+        // const minutes = 0; // Calculate minutes (0, 15, 30, 45)
+        const amPm = hour < 12 || hour === 24 ? "AM" : "PM";
+        const formattedHour = hour <= 12 ? hour : hour - 12;
+
+        return `${formattedHour}:00${amPm}`;
+    };
+
 
 
     return (
@@ -112,7 +121,7 @@ let MemberPage = () => {
                                 {
                                     Array.from(Array(12).keys()).map((i, index) => (
                                         <TableRow key={index}>
-                                            <TableCell sx={{ borderBottom: "1px solid" }} align='center' width="16%">{`${i + 8}: 00`}</TableCell>
+                                            <TableCell sx={{ borderBottom: "1px solid" }} align='center' width="16%">{getTimeLabel(i)}</TableCell>
                                             {
                                                 days.map((d, di) => (
                                                     <TableCell sx={cellStyle} key={d} width="12%">

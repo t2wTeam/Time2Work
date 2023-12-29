@@ -91,7 +91,14 @@ let OrgPage = () => {
         delmutation.mutate(name)
     }
 
+    const getTimeLabel = (hourIndex: number) => {
+        const hour = hourIndex + 8; // Convert index to hour (8 AM to 5 PM)
+        // const minutes = 0; // Calculate minutes (0, 15, 30, 45)
+        const amPm = hour < 12 || hour === 24 ? "AM" : "PM";
+        const formattedHour = hour <= 12 ? hour : hour - 12;
 
+        return `${formattedHour}:00${amPm}`;
+    };
 
     return (
         <Container sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
@@ -112,22 +119,23 @@ let OrgPage = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <TableContainer>
+                                <div style={{ overflow: 'auto', maxHeight: '500px' }}>
                                 <Table size="medium">
                                     <TableHead>
-                                        <TableRow>
+                                    <TableRow style={{ position: 'sticky', top: 0, background: "white", height: "3rem"}}>
                                             <TableCell sx={cellStyle} width="4%" />
-                                            <TableCell sx={cellStyle} width="18%" />
+                                            <TableCell sx={cellStyle} width="10%" />
                                             {
                                                 Array.from(Array(12).keys()).map((i, index) => (
-                                                    <TableCell key={index} sx={cellStyle} width="6%" align="center">
-                                                        {`${i + 8}: 00`}
+                                                    <TableCell key={index} sx={{ ...cellStyle}} width="6%" align="center">
+                                                        {getTimeLabel(i)}
                                                     </TableCell>
                                                 ))
                                             }
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {//Maybe object should be array cuz if not, dictionary is unordered :(
+                                    {//Maybe object should be array cuz if not, dictionary is unordered :(
                                             Object.keys(data).map((name) => (
                                                 <TableRow key={name}>
                                                     <TableCell align="center" sx={cellStyle}>
@@ -155,7 +163,7 @@ let OrgPage = () => {
                                                 </TableRow>
                                             ))
                                         }
-                                        
+
                                         <TableRow >
                                             <TableCell align="center" sx={cellStyle}>
                                                 <FormControl>
@@ -171,8 +179,8 @@ let OrgPage = () => {
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>
-                                    
                                 </Table>
+                                </div>
                             </TableContainer>
                         </Grid>
                     </Grid>
