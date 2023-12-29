@@ -122,9 +122,9 @@ let OrgPage = () => {
                                 <Table size="medium">
                                     <TableHead>
                                     <TableRow style={{ position: 'sticky', top: 0, background: "white", height: "3rem"}}>
-                                            <TableCell sx={cellStyle} width="4%" />
-                                            <TableCell sx={cellStyle} width="10%" />
-                                            {
+                                        <TableCell sx={{ ...cellStyle}} colSpan={2} width="16%" align="center">
+                                            Member
+                                        </TableCell>{
                                                 Array.from(Array(12).keys()).map((i, index) => (
                                                     <TableCell key={index} sx={{ ...cellStyle}} width="6%" align="center">
                                                         {formatTime(i)}
