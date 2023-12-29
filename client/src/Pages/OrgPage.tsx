@@ -91,18 +91,17 @@ let OrgPage = () => {
         delmutation.mutate(name)
     }
 
-    const getTimeLabel = (hourIndex: number) => {
+    const formatTime = (hourIndex: number) => {
         const hour = hourIndex + 8; // Convert index to hour (8 AM to 5 PM)
-        // const minutes = 0; // Calculate minutes (0, 15, 30, 45)
         const amPm = hour < 12 || hour === 24 ? "AM" : "PM";
         const formattedHour = hour <= 12 ? hour : hour - 12;
-
         return `${formattedHour}:00${amPm}`;
     };
 
     return (
         <Container sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-            <Button onClick={() => { navigate(`/`) }} sx={{ position: "absolute", left: "3rem", top: "2rem" }}>Back</Button>
+            <Button onClick={() => { navigate(`/`) }} sx={{ position: "absolute", left: "3rem", top: "1rem" }}>Back</Button>
+            <div style={{marginTop: "3rem" }}>
             {loading ? (
                 <Loading />
             ) : (
@@ -128,7 +127,7 @@ let OrgPage = () => {
                                             {
                                                 Array.from(Array(12).keys()).map((i, index) => (
                                                     <TableCell key={index} sx={{ ...cellStyle}} width="6%" align="center">
-                                                        {getTimeLabel(i)}
+                                                        {formatTime(i)}
                                                     </TableCell>
                                                 ))
                                             }
@@ -186,6 +185,7 @@ let OrgPage = () => {
                     </Grid>
                 </form>
             )}
+        </div>
         </Container>
     )
 }

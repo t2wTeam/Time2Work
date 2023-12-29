@@ -85,16 +85,14 @@ let MemberPage = () => {
         e.target.end.value = "12:15"
     }
 
-    const getTimeLabel = (hourIndex: number) => {
-        const hour = hourIndex + 8; // Convert index to hour (8 AM to 5 PM)
-        // const minutes = 0; // Calculate minutes (0, 15, 30, 45)
+    const formatTime =  (time: string) => {
+        let splitTime = time.split(":");
+        let hour = parseInt(splitTime[0]);
+        let min = splitTime[1];
         const amPm = hour < 12 || hour === 24 ? "AM" : "PM";
         const formattedHour = hour <= 12 ? hour : hour - 12;
-
-        return `${formattedHour}:00${amPm}`;
-    };
-
-
+        return `${formattedHour}:${min}${amPm}`;
+    }
 
     return (
         <Container sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -121,7 +119,7 @@ let MemberPage = () => {
                                 {
                                     Array.from(Array(12).keys()).map((i, index) => (
                                         <TableRow key={index}>
-                                            <TableCell sx={{ borderBottom: "1px solid" }} align='center' width="16%">{getTimeLabel(i)}</TableCell>
+                                            <TableCell sx={{ borderBottom: "1px solid" }} align='center' width="16%">{formatTime(`${i+8}:00`)}</TableCell>
                                             {
                                                 days.map((d, di) => (
                                                     <TableCell sx={cellStyle} key={d} width="12%">
@@ -192,6 +190,7 @@ let MemberPage = () => {
                                 <Autocomplete
                                     disablePortal
                                     options={allTime.slice(0, 48)}
+                                    // getOptionLabel={(option) => formatTime(option)}
                                     sx={{ width: "10rem", padding: "0" }}
                                     renderInput={(params) => <TextField name="start" {...params} label="Start" variant="standard" />}
                                 />
@@ -203,6 +202,7 @@ let MemberPage = () => {
                                 <Autocomplete
                                     disablePortal
                                     options={allTime.slice(0, 49)}
+                                    // getOptionLabel={(option) => formatTime(option)}
                                     sx={{ width: "10rem", padding: "0" }}
                                     renderInput={(params) => <TextField name="end" {...params} label="End" variant="standard" />}
                                 />
