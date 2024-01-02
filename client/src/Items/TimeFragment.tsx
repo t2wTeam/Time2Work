@@ -39,7 +39,8 @@ export const TimeFragmentVertical = (props: TimeFragment) =>{
                     <Grid item key={i} xs={12}  width="100%"  height="25%"
                     sx={{ 
                         bgcolor: availibility ? "#4F7942" : "#F2F3F5",
-                        borderTop: i === 2 ?  "1px dashed": "none",
+                        border: availibility ? 0 : 0.25, // Apply border only when availibility is false
+                        // borderTop: i === 2 ?  "0.5px dashed": "none",
                         borderColor: "#DDDDDD",
                     }}/>
                 ))
