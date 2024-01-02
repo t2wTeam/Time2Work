@@ -69,8 +69,8 @@ let MemberPage = () => {
         const data = {
             available: e.target.availablegroup.value,
             days: selectedDays,
-            start: e.target.start.value,
-            end: e.target.end.value,
+            start: reformatTime(e.target.start.value),
+            end: reformatTime(e.target.end.value),
         }
 
         if (e.target.start.value === "" || e.target.end.value === ""){
@@ -93,6 +93,19 @@ let MemberPage = () => {
         const formattedHour = hour <= 12 ? hour : hour - 12;
         return `${formattedHour}:${min}${amPm}`;
     }
+
+    const reformatTime =  (time: string) => {
+        const [hour, minutePart] = time.split(":");
+        const [minute, amPm] = minutePart.split(/(?<=[0-9])([a-zA-Z]+)/);
+
+        let formattedHour = parseInt(hour);
+        if (amPm === "PM" && formattedHour < 12) {
+            formattedHour += 12;
+        } else if (amPm === "AM" && formattedHour === 12) {
+            formattedHour = 0;
+        }
+        return `${formattedHour}:${minute}`;
+    };
 
     return (
         <Container sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -190,7 +203,7 @@ let MemberPage = () => {
                                 <Autocomplete
                                     disablePortal
                                     options={allTime.slice(0, 48)}
-                                    // getOptionLabel={(option) => formatTime(option)}
+                                    getOptionLabel={(option) => formatTime(option)}
                                     sx={{ width: "10rem", padding: "0" }}
                                     renderInput={(params) => <TextField name="start" {...params} label="Start" variant="standard" />}
                                 />
@@ -202,7 +215,7 @@ let MemberPage = () => {
                                 <Autocomplete
                                     disablePortal
                                     options={allTime.slice(0, 49)}
-                                    // getOptionLabel={(option) => formatTime(option)}
+                                    getOptionLabel={(option) => formatTime(option)}
                                     sx={{ width: "10rem", padding: "0" }}
                                     renderInput={(params) => <TextField name="end" {...params} label="End" variant="standard" />}
                                 />
