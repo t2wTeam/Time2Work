@@ -1,4 +1,8 @@
-import { Box, Container, Paper, Button, FormControl, FormHelperText, Input, InputLabel, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Skeleton, CircularProgress, Alert, Typography, Link, Slide, TextField, TextFieldProps } from '@mui/material';
+import { Box, Container, Paper, Button, FormControl, FormHelperText, Input, InputLabel, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Skeleton, CircularProgress, Alert, Typography, Link, Slide, TextField, TextFieldProps,  Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions} from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { useState, useRef } from 'react';
@@ -8,7 +12,7 @@ import Loading from '../Items/Loading';
 import { TimeFragment } from '../Items/TimeFragment';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
-
+import React from 'react';
 const cellStyle = { border: "1px solid", padding: "0", height: "2rem" }
 
 let OrgPage = () => {
@@ -20,6 +24,8 @@ let OrgPage = () => {
     // const [newMember, setNewMember] = useState("");
     const newMember = useRef<TextFieldProps>(null)
     const queryClient = useQueryClient()
+    const [selectedRows, setSelectedRows] = useState<number[]>([]);
+    const [deleteConfirmation, setDeleteConfirmation] = useState<{ open: boolean, member: string | null }>({ open: false, member: null });
 
     let { isLoading: loading, error: error, data: data, } = useQuery(
         ["get-organization-times", organization],
@@ -91,11 +97,58 @@ let OrgPage = () => {
         delmutation.mutate(name)
     }
 
+    const openDeleteConfirmation = (member: string) => {
+        setDeleteConfirmation({ open: true, member });
+    };
+
+    const closeDeleteConfirmation = () => {
+        setDeleteConfirmation({ open: false, member: null });
+    };
+
+    const handleDeleteConfirmation = () => {
+        if (deleteConfirmation.member) {
+            delMember(deleteConfirmation.member);
+        }
+        closeDeleteConfirmation();
+    };
+
     const formatTime = (hourIndex: number) => {
         const hour = hourIndex + 8; // Convert index to hour (8 AM to 5 PM)
         const amPm = hour < 12 || hour === 24 ? "AM" : "PM";
         const formattedHour = hour <= 12 ? hour : hour - 12;
         return `${formattedHour}:00${amPm}`;
+    };
+    const handleCellClick = (rowIndex: number) => {
+        if (selectedRows.includes(rowIndex)) {
+            // If the row is already selected, remove it
+            setSelectedRows(selectedRows.filter((row) => row !== rowIndex));
+        } else {
+            // If the row is not selected, add it and keep only the last two selected rows
+            setSelectedRows((prevSelectedRows) => [...prevSelectedRows.slice(-1), rowIndex]);
+        }
+    };
+    const isCellSelected = (rowIndex: number) => {
+        return selectedRows.includes(rowIndex);
+    };
+
+    const renderVerticalLines = (rowIndex: number) => {
+        if (selectedRows.includes(rowIndex)) {
+            return (
+                <React.Fragment>
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            borderLeft: '2px solid red', // Customize the line style/color
+                            height: '100%',
+                            zIndex: 1,
+                            //left: `${6 * rowIndex}%`, // Adjust position based on your cell width
+                        }}
+                    ></div>
+                </React.Fragment>
+            );
+        }
+        return null;
     };
 
     return (
@@ -121,10 +174,10 @@ let OrgPage = () => {
                                 <div style={{ overflow: 'auto', maxHeight: '500px' }}>
                                 <Table size="medium">
                                     <TableHead>
-                                    <TableRow style={{ position: 'sticky', top: 0, background: "white", height: "3rem"}}>
+                                    <TableRow style={{ position: 'sticky', top: 0, background: "white", height: "3rem", userSelect: 'none', zIndex: 1}}>
                                         <TableCell sx={{ ...cellStyle}} colSpan={2} width="16%" align="center">
                                             Member
-                                        </TableCell>{
+                                        </TableCell >{
                                                 Array.from(Array(12).keys()).map((i, index) => (
                                                     <TableCell key={index} sx={{ ...cellStyle}} width="6%" align="center">
                                                         {formatTime(i)}
@@ -138,24 +191,28 @@ let OrgPage = () => {
                                             Object.keys(data).map((name) => (
                                                 <TableRow key={name}>
                                                     <TableCell align="center" sx={cellStyle}>
-                                                        <IconButton aria-label="Delete" onClick={() => delMember(name)}>
+                                                        <IconButton aria-label="Delete" onClick={() => openDeleteConfirmation(name)}>
                                                             <DeleteOutlinedIcon />
                                                         </IconButton>
                                                     </TableCell>
                                                     <TableCell align="center" sx={cellStyle}>
                                                         <Link href={`/${organization}/${name}`}>
-
                                                             {name}
                                                         </Link>
                                                     </TableCell>
                                                     {
                                                         Array.from(Array(12).keys()).map((_, i) => (
-                                                            <TableCell key={i} sx={cellStyle}>
+                                                            <TableCell key={i} sx={cellStyle} onClick={() => handleCellClick(i)}
+                                                                       style={{
+                                                                           background: isCellSelected(i) ? 'lightred' : 'transparent',
+                                                                           position: 'relative',
+                                                                       }}>
                                                                 <TimeFragment fragments={[
                                                                     data[name][day * 48 + i * 4],
                                                                     data[name][day * 48 + i * 4 + 1],
                                                                     data[name][day * 48 + i * 4 + 2],
                                                                     data[name][day * 48 + i * 4 + 3]]} />
+                                                                {renderVerticalLines(i)}
                                                             </TableCell>
                                                         ))
                                                     }
@@ -186,6 +243,23 @@ let OrgPage = () => {
                 </form>
             )}
         </div>
+            {/* Delete Confirmation Dialog */}
+            <Dialog open={deleteConfirmation.open} onClose={closeDeleteConfirmation}>
+                <DialogTitle>Delete Confirmation</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to delete the member: {deleteConfirmation.member}?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDeleteConfirmation} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleDeleteConfirmation} color="primary">
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Container>
     )
 }
