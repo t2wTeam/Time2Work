@@ -241,7 +241,7 @@ const OrgPage = () => {
                                                                         backgroundColor: '#E0E0E0',
                                                                     },
                                                                 }}>
-                                                                    <Link href={`/${organization}/${name}`} sx={{ textDecoration: 'none', color: '#2954D0', '&:hover': { fontWeight: 'bold' } }}>
+                                                                    <Link href={`/${organization}/${name}`} sx={{ textDecoration: 'none', '&:hover': { fontWeight: 'bold' } }}>
                                                                         <div>
                                                                             {name}
                                                                         </div>
@@ -293,7 +293,7 @@ const OrgPage = () => {
                                                                         backgroundColor: '#F2F1F1',
                                                                     },
                                                                 }}>
-                                                                    <Link href={`/${organization}/${name}`} sx={{ textDecoration: 'none', color: '#2954D0', '&:hover': { fontWeight: 'bold' } }}>
+                                                                    <Link href={`/${organization}/${name}`} sx={{ textDecoration: 'none', '&:hover': { fontWeight: 'bold' } }}>
                                                                         <div>
                                                                             {name}
                                                                         </div>
