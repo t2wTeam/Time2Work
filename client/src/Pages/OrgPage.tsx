@@ -217,7 +217,7 @@ const OrgPage = () => {
                                                             Member
                                                         </TableCell>
                                                         {Array.from(Array(12).keys()).map((i, index) => (
-                                                            <TableCell key={index} sx={{ ...cellStyle }} width="6%" align="center">
+                                                            <TableCell key={index} sx={{ ...cellStyle }} colSpan={4} width="6%" align="center">
                                                                 {formatTime(i)}
                                                             </TableCell>
                                                         ))}
@@ -249,21 +249,24 @@ const OrgPage = () => {
                                                                         </div>
                                                                     </Link>
                                                                 </TableCell>
-                                                                {Array.from(Array(12).keys()).map((_, i) => (
+                                                                {Array.from(Array(48).keys()).map((_, i) => (
                                                                     <TableCell
                                                                         key={i}
-                                                                        sx={cellStyle}
-                                                                        onClick={() => handleCellClick(i)}
-                                                                        style={{
+                                                                        sx={{
+                                                                            ...cellStyle,
+                                                                            // borderBottom: '1px solid black', // Solid border at the bottom
+                                                                            // borderRight: i % 4 === 3 ? '0px dotted #DDDDDD' : '1px solid #DDDDDD', // Solid border on every 4th cell's right side, otherwise dotted
+                                                                            border: '0px',
                                                                             position: 'relative',
                                                                         }}
+                                                                        onClick={() => handleCellClick(i)}
                                                                     >
                                                                         <TimeFragment
                                                                             fragments={[
-                                                                                data[name][day * 48 + i * 4],
-                                                                                data[name][day * 48 + i * 4 + 1],
-                                                                                data[name][day * 48 + i * 4 + 2],
-                                                                                data[name][day * 48 + i * 4 + 3],
+                                                                                data[name][day * 48 + i],
+                                                                                // data[name][day * 48 + i * 4 + 1],
+                                                                                // data[name][day * 48 + i * 4 + 2],
+                                                                                // data[name][day * 48 + i * 4 + 3],
                                                                             ]}
                                                                         />
                                                                         {renderVerticalLines(i)}
@@ -298,21 +301,24 @@ const OrgPage = () => {
                                                                         </div>
                                                                     </Link>
                                                                 </TableCell>
-                                                                {Array.from(Array(12).keys()).map((_, i) => (
+                                                                {Array.from(Array(48).keys()).map((_, i) => (
                                                                     <TableCell
                                                                         key={i}
-                                                                        sx={cellStyle}
-                                                                        onClick={() => handleCellClick(i)}
-                                                                        style={{
+                                                                        sx={{
+                                                                            ...cellStyle,
+                                                                            // borderBottom: '1px solid black', // Solid border at the bottom
+                                                                            // borderRight: i % 4 === 3 ? '0px dotted #DDDDDD' : '1px solid #DDDDDD', // Solid border on every 4th cell's right side, otherwise dotted
+                                                                            border: '0px',
                                                                             position: 'relative',
                                                                         }}
+                                                                        onClick={() => handleCellClick(i)}
                                                                     >
                                                                         <TimeFragment
                                                                             fragments={[
-                                                                                data[name][day * 48 + i * 4],
-                                                                                data[name][day * 48 + i * 4 + 1],
-                                                                                data[name][day * 48 + i * 4 + 2],
-                                                                                data[name][day * 48 + i * 4 + 3],
+                                                                                data[name][day * 48 + i],
+                                                                                // data[name][day * 48 + i * 4 + 1],
+                                                                                // data[name][day * 48 + i * 4 + 2],
+                                                                                // data[name][day * 48 + i * 4 + 3],
                                                                             ]}
                                                                         />
                                                                         {renderVerticalLines(i)}
