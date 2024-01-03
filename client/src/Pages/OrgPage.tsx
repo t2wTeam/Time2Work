@@ -224,7 +224,7 @@ const OrgPage = () => {
                                                 <TableBody>
                                                     {selectedMembers.map((name) => (
                                                         <React.Fragment key={name}>
-                                                            <TableRow style={{ background: theme.palette.mode === "dark" ? "#444444": "#CCCCCC"}}>
+                                                            <TableRow style={{ background: theme.palette.mode === "dark" ? "#444444": "#F2F3F8"}}>
                                                                 <TableCell align="center" sx={cellStyle}>
                                                                     <IconButton aria-label="Delete" onClick={() => openDeleteConfirmation(name)}>
                                                                         <DeleteOutlinedIcon />
@@ -238,7 +238,7 @@ const OrgPage = () => {
                                                                 <TableCell align="center" sx={{
                                                                     ...cellStyle,
                                                                     '&:hover': {
-                                                                        backgroundColor: '#E0E0E0',
+                                                                        background: theme.palette.mode === "dark" ? "#555555": "#E0E0E0",
                                                                     },
                                                                 }}>
                                                                     <Link href={`/${organization}/${name}`} sx={{ textDecoration: 'none', '&:hover': { fontWeight: 'bold' } }}>
@@ -290,7 +290,7 @@ const OrgPage = () => {
                                                                 <TableCell align="center" sx={{
                                                                     ...cellStyle,
                                                                     '&:hover': {
-                                                                        backgroundColor: '#F2F1F1',
+                                                                    background: theme.palette.mode === "dark" ? "#444444": "#F2F1F1",
                                                                     },
                                                                 }}>
                                                                     <Link href={`/${organization}/${name}`} sx={{ textDecoration: 'none', '&:hover': { fontWeight: 'bold' } }}>
