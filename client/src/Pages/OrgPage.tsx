@@ -1,41 +1,38 @@
-import React from 'react';
+import { useTheme } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import WarningIcon from '@mui/icons-material/Warning';
 import {
-    Box,
-    Container,
-    Paper,
     Button,
+    Container,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     FormControl,
-    Typography,
-    Link,
+    Grid,
     IconButton,
+    Link,
+    Paper,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Grid,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
     TextField,
     TextFieldProps,
-    ThemeProvider,
+    Typography
 } from '@mui/material';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
-import { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Items/Loading';
 import { TimeFragment } from '../Items/TimeFragment';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import AddIcon from '@mui/icons-material/Add';
-import WarningIcon from '@mui/icons-material/Warning';
-import { createTheme } from '@mui/material/styles';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const cellStyle = { border: '1px solid', padding: '0', height: '2rem' };
 
@@ -49,6 +46,7 @@ const OrgPage = () => {
     const { enqueueSnackbar } = useSnackbar();
     const { organization } = useParams();
     const navigate = useNavigate();
+    const theme = useTheme();
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const [day, setDay] = useState((new Date().getDay() + 6) % 7);
     const newMember = useRef<TextFieldProps>(null);
@@ -226,7 +224,7 @@ const OrgPage = () => {
                                                 <TableBody>
                                                     {selectedMembers.map((name) => (
                                                         <React.Fragment key={name}>
-                                                            <TableRow style={{ background: 'lightgray' }}>
+                                                            <TableRow style={{ background: theme.palette.mode === "dark" ? "#444444": "#CCCCCC"}}>
                                                                 <TableCell align="center" sx={cellStyle}>
                                                                     <IconButton aria-label="Delete" onClick={() => openDeleteConfirmation(name)}>
                                                                         <DeleteOutlinedIcon />
