@@ -212,7 +212,7 @@ const OrgPage = () => {
                                         <div style={{ overflow: 'auto', maxHeight: '500px' }}>
                                             <Table size="medium">
                                                 <TableHead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
-                                                    <TableRow style={{ background: 'white', height: '3rem' }}>
+                                                    <TableRow style={{ height: '3rem' }}>
                                                         <TableCell sx={{ ...cellStyle }} colSpan={3} width="16%" align="center">
                                                             Member
                                                         </TableCell>
