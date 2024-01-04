@@ -109,7 +109,7 @@ let MemberPage = () => {
 
     return (
         <Container sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <Button onClick={() => { navigate(`/${organization}`) }} sx={{ alignSelf: "flex-start"}}>Back</Button>
+            {/*<Button onClick={() => { navigate(`/${organization}`) }} sx={{ alignSelf: "flex-start"}}>Back</Button>*/}
             {loading ? (
                 <Loading />
             ) : (
