@@ -207,7 +207,7 @@ const OrgPage = () => {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TableContainer>
-                                        <div style={{ overflow: 'auto', maxHeight: '500px' }}>
+                                        <div style={{ overflow: 'auto', maxHeight: '70vh' }}>
                                             <Table stickyHeader  size="medium">
                                                 <TableHead>
                                                     <TableRow style={{ height: '3rem' }}>
