@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/tmp/t2wvol"
+    path: "/data/t2wvol"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
