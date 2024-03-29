@@ -17,8 +17,9 @@ export const TimeFragment = (props: TimeFragment) => {
                     // xs={3}
                     sx={{
                         bgcolor: availibility ? "#4F7942" : "transparent",
-                        border: availibility ? '0.25px solid #4F7942' : '0.25px dotted #DDDDDD', // Apply border only when availability is false
+                        border: availibility ? 0 : '0.25px dotted #DDDDDD', // Apply border only when availability is false
                         borderBottom: '1px solid black', // Solid border at the bottom for all items
+                        minWidth: '2px',
                         // borderStyle: "dotted",
                         // borderColor: "#DDDDDD", // Border color
                     }}
